@@ -10,6 +10,8 @@ services:
       dockerfile: ./docker/php/Dockerfile
     volumes:
       - ./src/:/var/www
+      - ./docker/php/php.ini:/usr/local/etc/php/php.ini
+      - ./log:/var/log
     environment:
       - DB_CONNECTION=mysql
       - DB_HOST=db
@@ -43,3 +45,17 @@ services:
       TZ: 'Asia/Tokyo'
     volumes:
       - mysql-volume:/var/lib/mysql
+
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    depends_on:
+      - db
+    environment:
+      - PMA_ARBITRARY=1
+      - PMA_HOSTS=db
+      - PMA_USER=db_root
+      - PMA_PASSWORD=db_root
+    ports:
+      - "3000:80"
+    volumes:
+      - ./docker/phpmyadmin/sessions:/sessions

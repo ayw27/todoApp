@@ -8,21 +8,20 @@
     <!-- CSS -->
     <link rel="stylesheet" href="{{ asset('css/app.css') }}">
 
-    <title>react test</title>
+    <title>TODO 管理システム</title>
 </head>
 
 <body>
     <div id="app">
         <div class="container">
-            <h3 class="mt-5">Todo 管理システム</h3>
+            <h3 class="mt-5">TODO 管理システム</h3>
 
-            <!-- ここを置き換えていく -->
             <div id="todoApp"></div>
 
         </div>
     </div>
 
-<!-- avaScript -->
+<!-- JavaScript -->
 <script src="{{ asset('js/app.js')}}"></script>
 </body>
 </html>

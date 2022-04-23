@@ -19,4 +19,9 @@ RUN apt-get install -y npm \
     && npm install n -g \
     && n stable
 
+RUN apt update \
+    # xdebugのインストール
+    && pecl install xdebug \
+    && docker-php-ext-enable xdebug
+
 WORKDIR /var/www
