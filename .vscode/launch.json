@@ -7,7 +7,7 @@
             "request": "launch",
             "port": 9012,
             "pathMappings": {
-              "/var/www/public": "${workspaceFolder}/public"
+              "/var/www": "${workspaceRoot}/src"
             }
         }
     ]

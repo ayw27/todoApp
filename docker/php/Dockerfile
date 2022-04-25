@@ -19,7 +19,7 @@ RUN apt-get install -y npm \
     && npm install n -g \
     && n stable
 
-RUN apt update \
+RUN apt-get update \
     # xdebugのインストール
     && pecl install xdebug \
     && docker-php-ext-enable xdebug
