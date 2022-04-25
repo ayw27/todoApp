@@ -3,12 +3,12 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Todo;
+use App\Models\Todo;
 
 class TodoController extends Controller
 {
-    //getTodos
-    public function getTodos()
+    //初期表示
+    public function index()
     {
         $todos = Todo::all();
         return $todos;
