@@ -14,9 +14,8 @@ class TodoController extends Controller
         return $todos;
     }
 
-    //add todo
-    public function addTodo(Request $request)
-    {
+    //add
+    public function addTodo(Request $request){
         $todo = new Todo;
         $todo->title = $request->title;
         $todo->save();
@@ -25,9 +24,13 @@ class TodoController extends Controller
         return $todos;
     }
 
+    //complete
+    public function completeTodo(Request $request)[
+        
+    ]
+
     //delete
-    public function deleteTodo(Request $request)
-    {
+    public function deleteTodo(Request $request){
         $todo = Todo::find($request->id);
         $todo->delete();
 

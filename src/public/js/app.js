@@ -5368,6 +5368,9 @@ function RenderRows(props) {
       }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("td", {
         children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("button", {
           className: "btn btn-secondary",
+          onClick: function onClick() {
+            return props.deleteTask(todo);
+          },
           children: "\u5B8C\u4E86"
         })
       })]
@@ -5387,24 +5390,91 @@ var TodoApp = /*#__PURE__*/function (_Component) {
 
     _this = _super.call(this);
     _this.state = {
-      todos: []
+      todos: [],
+      todo: ''
     };
+    _this.inputChange = _this.inputChange.bind(_assertThisInitialized(_this));
+    _this.addTodo = _this.addTodo.bind(_assertThisInitialized(_this));
+    _this.deleteTask = _this.deleteTask.bind(_assertThisInitialized(_this));
     return _this;
-  } //一覧情報を取得しセット
+  } //初回表示 一覧情報を取得しセット
 
 
   _createClass(TodoApp, [{
     key: "componentDidMount",
     value: function componentDidMount() {
+      var _this2 = this;
+
       axios__WEBPACK_IMPORTED_MODULE_2___default().get('/api/get').then(function (res) {
         console.log('通信成功');
         var data = res.data;
         console.log(data);
-        /*
-        this.setState({
-            todos: res.data
+
+        _this2.setState({
+          todos: data
         });
-        */
+      })["catch"](function (e) {
+        console.log(e + ':通信に失敗しました');
+      });
+    } //入力
+
+  }, {
+    key: "inputChange",
+    value: function inputChange(event) {
+      switch (event.target.name) {
+        case 'todo':
+          this.setState({
+            todo: event.target.value
+          });
+          break;
+
+        default:
+          break;
+      }
+    } //登録ボタンクリック
+
+  }, {
+    key: "addTodo",
+    value: function addTodo() {
+      var _this3 = this;
+
+      //空だったら
+      if (this.state.todo == '') {
+        return;
+      } //入力値を通信
+
+
+      axios__WEBPACK_IMPORTED_MODULE_2___default().post('/api/add', {
+        title: this.state.todo
+      }).then(function (res) {
+        console.log('通信成功');
+        var data = res.data;
+        console.log(data);
+
+        _this3.setState({
+          todos: data,
+          todo: ''
+        });
+      })["catch"](function (e) {
+        console.log(e + ':通信に失敗しました');
+      });
+    } //完了ボタンクリック
+
+  }, {
+    key: "deleteTask",
+    value: function deleteTask(todo) {
+      var _this4 = this;
+
+      axios__WEBPACK_IMPORTED_MODULE_2___default().post('/api/del', {
+        id: todo.id
+      }).then(function (res) {
+        console.log('通信成功');
+        var data = res.data;
+        console.log(data);
+
+        _this4.setState({
+          todos: data
+        });
       })["catch"](function (e) {
         console.log(e + ':通信に失敗しました');
       });
@@ -5412,8 +5482,21 @@ var TodoApp = /*#__PURE__*/function (_Component) {
   }, {
     key: "render",
     value: function render() {
-      return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, {
-        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsxs)("table", {
+      return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsxs)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, {
+        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsxs)("div", {
+          className: "form-group mt-4",
+          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("input", {
+            type: "text",
+            className: "form-control",
+            name: "todo",
+            value: this.state.todo,
+            onChange: this.inputChange
+          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("button", {
+            className: "btn btn-primary",
+            onClick: this.addTodo,
+            children: "\u767B\u9332"
+          })]
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsxs)("table", {
           className: "table mt-5",
           children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("thead", {
             children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsxs)("tr", {
@@ -5427,10 +5510,11 @@ var TodoApp = /*#__PURE__*/function (_Component) {
             })
           }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("tbody", {
             children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)(RenderRows, {
-              todos: this.state.todos
+              todos: this.state.todos,
+              deleteTask: this.deleteTask
             })
           })]
-        })
+        })]
       });
     }
   }]);
