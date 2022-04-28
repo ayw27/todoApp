@@ -1,14 +1,15 @@
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
+import Button from '@mui/material/Button';
 import axios from "axios";
 
 function RenderRows(props){
     return props.todos.map(todo => {
         return (
             <tr key={todo.id}>
-                <td>{todo.id}</td>
                 <td>{todo.title}</td>
-                <td><button className="btn btn-secondary" onClick={() => props.deleteTask(todo)}>完了</button></td>
+                <td><Button variant="contained">complete</Button></td>
+                <td><Button variant="outlined" onClick={() => props.deleteTask(todo)}>Delete</Button></td>
             </tr>
         );
     });
@@ -129,7 +130,6 @@ export default class TodoApp extends Component {
                 <table className="table mt-5">
                     <thead>
                         <tr>
-                            <th>ID</th>
                             <th>タスク</th>
                             <th>完了</th>
                             <th></th>
