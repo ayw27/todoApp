@@ -8,8 +8,7 @@ use App\Models\Todo;
 class TodoController extends Controller
 {
     //初期表示
-    public function index()
-    {
+    public function index(){
         $todos = Todo::all();
         return $todos;
     }
@@ -25,9 +24,22 @@ class TodoController extends Controller
     }
 
     //complete
-    public function completeTodo(Request $request)[
+    public function completeTodo(Request $request){
+        $todo = Todo::find($request->id);
+        $todo->status = true;
+        $todo->save();
         
-    ]
+        return $todo['status'];
+    }
+
+    //return
+    public function returnTodo(Request $request){
+        $todo = Todo::find($request->id);
+        $todo->status = false;
+        $todo->save();
+
+        return $todo['status'];
+    }
 
     //delete
     public function deleteTodo(Request $request){

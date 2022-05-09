@@ -18,5 +18,7 @@ use App\Http\Controllers\TodoController;
 Route::group(['middleware' => 'api'], function(){
     Route::get('get', [ TodoController::class, 'index'] );
     Route::post('add', [ TodoController::class, 'addTodo'] );
+    Route::post('comp', [ TodoController::class, 'completeTodo'] );
+    Route::post('return', [ TodoController::class, 'returnTodo'] );
     Route::post('del', [ TodoController::class, 'deleteTodo'] );
 });

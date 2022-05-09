@@ -1,15 +1,24 @@
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 import Button from '@mui/material/Button';
+import TextField from '@mui/material/TextField';
 import axios from "axios";
 
 function RenderRows(props){
     return props.todos.map(todo => {
+
+        //let isStatus = props.completeTask(todo.status)
+        let isStatus = true
+
+        console.log(isStatus)
+
         return (
             <tr key={todo.id}>
                 <td>{todo.title}</td>
-                <td><Button variant="contained">complete</Button></td>
-                <td><Button variant="outlined" onClick={() => props.deleteTask(todo)}>Delete</Button></td>
+                {isStatus ? <td><Button variant="contained" onClick={() => props.completeTask(todo)}>COMPLETE</Button></td>
+                 : <td><Button variant="contained" disabled onClick={() => props.completeTask(todo)}>COMPLETE</Button></td>}
+                <td><Button variant="contained" onClick={() => props.returnTask(todo)}>RETURN</Button></td>
+                <td><Button variant="outlined" onClick={() => props.deleteTask(todo)}>DELETE</Button></td>
             </tr>
         );
     });
@@ -21,10 +30,12 @@ export default class TodoApp extends Component {
         super();
         this.state = {
             todos: [],
-            todo: ''
+            todo: '',
+            status: true
         }
         this.inputChange = this.inputChange.bind(this);
         this.addTodo = this.addTodo.bind(this);
+        this.completeTask = this.completeTask.bind(this);
         this.deleteTask = this.deleteTask.bind(this);
     }
 
@@ -63,7 +74,6 @@ export default class TodoApp extends Component {
         if(this.state.todo == ''){
             return;
         }
-
         //入力値を通信
         axios.post('/api/add', {
                 title: this.state.todo
@@ -84,7 +94,7 @@ export default class TodoApp extends Component {
 
     //完了ボタンクリック
     completeTask(todo){
-        axios.post('/api/complete', {
+        axios.post('/api/comp', {
             id: todo.id
         })
         .then((res) => {
@@ -92,8 +102,9 @@ export default class TodoApp extends Component {
             const data = res.data;
             console.log(data);
             this.setState({
-                todos: data
+                status: data
             });
+            console.log(this.state.status);
         })
         .catch((e) => {
             console.log(e + ':通信に失敗しました');
@@ -118,26 +129,25 @@ export default class TodoApp extends Component {
         });
     }
 
-
     render(){
         return (
             <React.Fragment>
                 <div className="form-group mt-4">
-                    <input type="text" className="form-control" name="todo" value={this.state.todo} onChange={this.inputChange}/>
-                    <button className="btn btn-primary" onClick={this.addTodo}>登録</button>
+                    <TextField fullWidth label="todo" id="todo" value={this.state.todo} onChange={this.inputChange} />
+                    <Button variant="contained" onClick={this.addTodo}>SUBMIT</Button>
                 </div>
-
                 <table className="table mt-5">
                     <thead>
                         <tr>
                             <th>タスク</th>
-                            <th>完了</th>
+                            <th></th>
                             <th></th>
                         </tr>
                     </thead>
                     <tbody>
                         <RenderRows
                             todos={this.state.todos}
+                            completeTask={this.completeTask}
                             deleteTask={this.deleteTask}
                         />
                     </tbody>
